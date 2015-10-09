@@ -17,7 +17,9 @@ var timeInterval = 1000;
 
 var eventTypes = ["click", "view", "post", "comment"];
 
-var cpuSeries = [];
+var cpuSeries1 = [];
+var cpuSeries2 = [];
+var cpuSeries3 = [];
 
 var eventSeries = [];
 
@@ -29,11 +31,25 @@ for (i = 0; i < backMilliseconds; i += timeInterval) {
   generatePointInAllSeries(startTime + i);
 }
 
-client.writePoints("cpu_idle", cpuSeries, {}, function(err){
+client.writePoints("cpu_idle", cpuSeries1, {}, function(err){
     if(err) {
         console.log("Cannot write data",err);
     }
 });
+
+client.writePoints("cpu_idle", cpuSeries2, {}, function(err){
+    if(err) {
+        console.log("Cannot write data",err);
+    }
+});
+
+client.writePoints("cpu_idle", cpuSeries3, {}, function(err){
+    if(err) {
+        console.log("Cannot write data",err);
+    }
+});
+
+
 client.writePoints("customer_events", eventSeries, {}, function(err){
     if(err) {
         console.log("Cannot write data",err);
@@ -45,7 +61,21 @@ console.log("Generated points for the last 24 hours. Starting continuous generat
 setInterval(function() {
     generatePointInAllSeries(new Date());
 
-    var lastCpuPoint = cpuSeries[cpuSeries.length-1];
+    var lastCpuPoint = cpuSeries1[cpuSeries1.length-1];
+    client.writePoint("cpu_idle", lastCpuPoint[0], lastCpuPoint[1], {}, function(err){
+        if(err) {
+            console.log("Cannot write data",err);
+        }
+    });
+
+    lastCpuPoint = cpuSeries2[cpuSeries2.length-1];
+    client.writePoint("cpu_idle", lastCpuPoint[0], lastCpuPoint[1], {}, function(err){
+        if(err) {
+            console.log("Cannot write data",err);
+        }
+    });
+
+    lastCpuPoint = cpuSeries3[cpuSeries3.length-1];
     client.writePoint("cpu_idle", lastCpuPoint[0], lastCpuPoint[1], {}, function(err){
         if(err) {
             console.log("Cannot write data",err);
@@ -64,7 +94,11 @@ function generatePointInAllSeries(time) {
   // generate fake cpu idle host values
   var hostName = "server" + Math.floor(Math.random() * 1000 % 4);
   var xvalue = Math.random() * 100;
-  cpuSeries.push([{value: xvalue, time: time}, {host: hostName}]);
+  cpuSeries1.push([{value: xvalue, time: time}, {host: "server1"}]);
+  xvalue = Math.random() * 100;
+  cpuSeries2.push([{value: xvalue, time: time}, {host: "server2"}]);
+  xvalue = Math.random() * 100;
+  cpuSeries3.push([{value: xvalue, time: time}, {host: "server3"}]);
 
   // generate some fake customer events
   for (j = 0; j < Math.random() * 10; j += 1) {
