@@ -1,5 +1,4 @@
 # InfluxDB data generator
-##### TODO: Proper readme and a refactor. Be patient, I will do it.
 
 ## What is it
 
@@ -9,17 +8,38 @@ It's a simple data generator to fill InfluxDB so you can play with either Influx
 
 Install node.js and npm:
 
-`sudo apt-get install nodejs npm`
+```
+sudo apt-get install nodejs npm
+```
 
-Install influx package using npm:
+Clone the repo, cd into the directory with `package.json` and run:
 
-`npm install influx`
+```
+npm install
+```
+
+Alternatively, you could run:
+
+```
+npm install influx
+```
+
+as it is the only dependency.
+Please verify installed inlux module version with npm:
+
+```
+npm list | grep influx
+```
+
+Make sure it 4.0.1 or higher. If it's lower then the generator **might** not work properly, as the API changed in the influx module.
 
 ## Run
 
 Hit:
 
-`nodejs app.js`
+```
+nodejs app.js
+```
 
 Application will inform you when it's done generating points from the past. That's all.
 
