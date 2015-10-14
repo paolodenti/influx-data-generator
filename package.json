@@ -7,8 +7,8 @@
     "test": "echo \"No tests specified\" && exit 1"
   },
   "author": "Łukasz Kamiński",
-  "email": "lkamins7@gmail.com"
-  "repository" :"github:lukasz-kaminski/influx-data-generator"
+  "email": "lkamins7@gmail.com",
+  "repository" :"github:lukasz-kaminski/influx-data-generator",
   "license": "MIT",
   "dependencies": {
     "influx": "^4.0.1"
