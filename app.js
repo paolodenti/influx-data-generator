@@ -1,109 +1,97 @@
+/*
+ * Author: Łukasz Kamiński
+ * github.com/lukasz-kaminski
+ * 
+ * This application simulates some metrics (hardware and business) 
+ * and writes them to InfluxDB so the user can play with either Influx or Grafana.
+ * I am aware that it's not the cleanest code ever, but complicating this 
+ * application would be an overkill.
+ */
 var influx = require('influx');
+var DBNAME = 'data';
+
 var client = influx({
     host: 'localhost',
     port: 8086,
     username: 'root',
     password: 'root',
-    database: 'data'
+    database: DBNAME
 });
 
-var data = {};
 // start time of 24 hours ago
 var backMilliseconds = 8600 * 10000;
-
+var timeInterval = 1000; //1s
+var eventTypes = ["click", "view", "post", "comment"];
+var cpuSeriesCount = 3;
 var startTime = new Date() - backMilliseconds;
 
-var timeInterval = 1000;
-
-var eventTypes = ["click", "view", "post", "comment"];
-
-var cpuSeries1 = [];
-var cpuSeries2 = [];
-var cpuSeries3 = [];
-
+var data = {};
+var cpuSeries = [];
 var eventSeries = [];
 
-client.createDatabase('data', function() {
-  console.log('creating database data', arguments);
-});
-
-for (i = 0; i < backMilliseconds; i += timeInterval) {
-  generatePointInAllSeries(startTime + i);
+for(var i = 0; i < cpuSeriesCount; ++i) {
+	cpuSeries.push([]);
 }
 
-client.writePoints("cpu_idle", cpuSeries1, {}, function(err){
-    if(err) {
-        console.log("Cannot write data",err);
-    }
+client.createDatabase(DBNAME, function() {
+  console.log('creating database ' + DBNAME, arguments);
 });
 
-client.writePoints("cpu_idle", cpuSeries2, {}, function(err){
-    if(err) {
-        console.log("Cannot write data",err);
-    }
-});
+generateData();
 
-client.writePoints("cpu_idle", cpuSeries3, {}, function(err){
-    if(err) {
-        console.log("Cannot write data",err);
-    }
-});
+// functions
 
+function generateData() {
+	fillDBWithPastData();
+	console.log("Generated points for the last 24 hours. Starting continuous generation.");
+	setInterval(generatePointForAllSeries, timeInterval);
+}
 
-client.writePoints("customer_events", eventSeries, {}, function(err){
-    if(err) {
-        console.log("Cannot write data",err);
-    }
-});
+function fillDBWithPastData() {
+	for (i = 0; i < backMilliseconds; i += timeInterval) {
+		for(series = 0; series < cpuSeries.length; ++series) {
+			cpuSeries[series].push(createCpuPoint(startTime + i, series));
+		}
+		eventSeries.push(createEventPoint(startTime + i));
+	}
 
-console.log("Generated points for the last 24 hours. Starting continuous generation.");
+	for(i = 0; i < cpuSeries.length; ++i) {
+		client.writePoints("cpu_idle", cpuSeries[i], {}, function(err) {
+			if(err) {
+        		console.log("Cannot write data",err);
+    		}
+    	});
+	}
+	client.writePoints("customer_events", eventSeries, {}, function(err) {
+			if(err) {
+        		console.log("Cannot write data",err);
+    		}
+    	});
+}
 
-setInterval(function() {
-    generatePointInAllSeries(new Date());
+function generatePointForAllSeries() {
+	for(series = 0; series < cpuSeries.length; ++series) {
+		var cpuPoint = createCpuPoint(new Date(), series);
+		client.writePoint("cpu_idle", cpuPoint[0], cpuPoint[1], {}, function(err) {
+			if(err) {
+        		console.log("Cannot write data",err);
+    		}
+    	});
+	}
+	var eventPoint = createEventPoint(new Date());
+	client.writePoint("customer_events", eventPoint[0], eventPoint[1], function(err) {
+			if(err) {
+        		console.log("Cannot write data",err);
+    		}
+    	});
+}
 
-    var lastCpuPoint = cpuSeries1[cpuSeries1.length-1];
-    client.writePoint("cpu_idle", lastCpuPoint[0], lastCpuPoint[1], {}, function(err){
-        if(err) {
-            console.log("Cannot write data",err);
-        }
-    });
+function createCpuPoint(time, server_number) {
+	return [{value: Math.random() * 100, time: time}, {host: "server" + server_number}];
+}
 
-    lastCpuPoint = cpuSeries2[cpuSeries2.length-1];
-    client.writePoint("cpu_idle", lastCpuPoint[0], lastCpuPoint[1], {}, function(err){
-        if(err) {
-            console.log("Cannot write data",err);
-        }
-    });
-
-    lastCpuPoint = cpuSeries3[cpuSeries3.length-1];
-    client.writePoint("cpu_idle", lastCpuPoint[0], lastCpuPoint[1], {}, function(err){
-        if(err) {
-            console.log("Cannot write data",err);
-        }
-    });
-
-    var lastEventPoint = eventSeries[eventSeries.length-1];
-    client.writePoint("customer_events", lastEventPoint[0], lastEventPoint[1], {}, function(err){
-        if(err) {
-            console.log("Cannot write data",err);
-        }
-    });
-}, 1000);
-
-function generatePointInAllSeries(time) {
-  // generate fake cpu idle host values
-  var hostName = "server" + Math.floor(Math.random() * 1000 % 4);
-  var xvalue = Math.random() * 100;
-  cpuSeries1.push([{value: xvalue, time: time}, {host: "server1"}]);
-  xvalue = Math.random() * 100;
-  cpuSeries2.push([{value: xvalue, time: time}, {host: "server2"}]);
-  xvalue = Math.random() * 100;
-  cpuSeries3.push([{value: xvalue, time: time}, {host: "server3"}]);
-
-  // generate some fake customer events
-  for (j = 0; j < Math.random() * 10; j += 1) {
+function createEventPoint(time) {
     var customerId = Math.floor(Math.random() * 1000);
     var eventTypeIndex = Math.floor(Math.random() * 1000 % 4);
-    eventSeries.push([{value: customerId, time: time},{type: eventTypes[eventTypeIndex]}]);
-  }
+    return [{value: customerId, time: time},{type: eventTypes[eventTypeIndex]}];
 }
