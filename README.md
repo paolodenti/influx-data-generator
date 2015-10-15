@@ -4,6 +4,8 @@
 
 It's a simple data generator to fill InfluxDB so you can play with either Influx or Grafana. It generates random points in two measurements (cpu_idle and customer_events) for every second, for the last 24 hours. After the generation is done, application starts to generate random points every second continuously. It adds tags to the data sent to Influx so you have more toys to play with.
 
+It was written to provide an example on mine and [Paweł](https://github.com/reverendus)'s lecture on logging in microservices at [JDD2015](http://15.jdd.org.pl).
+
 ## Prerequisites
 
 Install node.js and npm:
