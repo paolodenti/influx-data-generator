@@ -33,7 +33,11 @@ npm list | grep influx
 
 Make sure it 4.0.1 or higher. If it's lower then the generator **might** not work properly, as the API changed in the influx module.
 
-## Run
+## Run InfluxDB and Grafana
+
+See [my another repo](https://github.com/lukasz-kaminski/grafana-influxdb-statsd-springboot).
+
+## Run the generator
 
 Hit:
 
@@ -43,5 +47,9 @@ nodejs app.js
 
 Application will inform you when it's done generating points from the past. That's all.
 
+## Visualise the metrics
+
+Go to Grafana and import the dashboard - you'll find it in this repo. Should work right away.
+
 ## Credits
-Credit goes to [stackflow](http://stackoverflow.com/users/4132820/stackflow) from [this thread](http://stackoverflow.com/questions/26317397/influxdb-error-no-host-available). I took his code and fixed it, also added a few tweaks.
+Credit goes to [stackflow](http://stackoverflow.com/users/4132820/stackflow) from [this thread](http://stackoverflow.com/questions/26317397/influxdb-error-no-host-available). His code inspired me to write this.
