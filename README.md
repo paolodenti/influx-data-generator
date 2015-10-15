@@ -27,13 +27,13 @@ npm install influx
 ```
 
 as it is the only dependency.
-Please verify installed inlux module version with npm:
+Please verify installed influx module version with npm:
 
 ```
 npm list | grep influx
 ```
 
-Make sure it 4.0.1 or higher. If it's lower then the generator **might** not work properly, as the API changed in the influx module.
+Make sure it is 4.0.1 or higher. If it's lower then the generator **might** not work properly, as the API changed in the influx module.
 
 ## Run InfluxDB and Grafana
 
