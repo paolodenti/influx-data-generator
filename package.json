@@ -1,16 +1,16 @@
 {
-  "name": "influxdb-data-generator",
-  "version": "0.0.0",
-  "description": "Random points generator for InfluxDB",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"No tests specified\" && exit 1"
-  },
-  "author": "Łukasz Kamiński",
-  "email": "lkamins7@gmail.com",
-  "repository" :"github:lukasz-kaminski/influx-data-generator",
-  "license": "MIT",
-  "dependencies": {
-    "influx": "^4.0.1"
-  }
+    "name": "influxdb-data-generator",
+    "version": "0.0.1",
+    "description": "Random points generator for InfluxDB (forked from github:lukasz-kaminski/influx-data-generator)",
+    "main": "app.js",
+    "scripts": {
+        "test": "echo \"No tests specified\" && exit 1"
+    },
+    "author": "Paolo Denti",
+    "email": "paolo.denti@gmail.com",
+    "repository": "github:paolodenti/influx-data-generator",
+    "license": "MIT",
+    "dependencies": {
+        "influx": "^4.0.1"
+    }
 }
