@@ -8,13 +8,13 @@
  * application would be an overkill.
  */
 var influx = require("influx");
-var DBNAME = process.env.DBNAME ? process.env.DBNAME : "data";
+var DBNAME = process.env.IDG_DBNAME ? process.env.IDG_DBNAME : "data";
 
 var client = influx({
-    host: process.env.DBHOST ? process.env.DBHOST : "localhost",
-    port: process.env.DBPORT ? process.env.DBPORT : 8086,
-    username: process.env.DBUSER ? process.env.DBUSER : "root",
-    password: process.env.DBPASSWORD ? process.env.DBPASSWORD : "root",
+    host: process.env.IDG_DBHOST ? process.env.IDG_DBHOST : "localhost",
+    port: process.env.IDG_DBPORT ? process.env.IDG_DBPORT : 8086,
+    username: process.env.IDG_DBUSER ? process.env.IDG_DBUSER : "root",
+    password: process.env.IDG_DBPASSWORD ? process.env.IDG_DBPASSWORD : "root",
     database: DBNAME
 });
 

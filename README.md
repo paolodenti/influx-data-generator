@@ -1,3 +1,14 @@
+# Forked from https://github.com/lukasz-kaminski/influx-data-generator
+
+## environment variables
+
+| Name           | Default value | Description        |
+| -------------- | ------------- | ------------------ |
+| IDG_DBHOST     | localhost     | Influxdb address   |
+| IDG_DBPORT     | 8086          | Influxdb port      |
+| IDG_DBUSER     | root          | Influxdb user      |
+| IDG_DBPASSWORD | root          | Influxdb passsword |
+
 # InfluxDB data generator
 
 ## What is it
@@ -54,4 +65,5 @@ Application will inform you when it's done generating points from the past. That
 Go to Grafana and import the dashboard - you'll find it in this repo. Should work right away.
 
 ## Credits
+
 Credit goes to [stackflow](http://stackoverflow.com/users/4132820/stackflow) from [this thread](http://stackoverflow.com/questions/26317397/influxdb-error-no-host-available). His code inspired me to write this.
