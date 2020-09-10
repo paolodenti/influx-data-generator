@@ -8,6 +8,7 @@
 | IDG_DBPORT     | 8086          | Influxdb port      |
 | IDG_DBUSER     | root          | Influxdb user      |
 | IDG_DBPASSWORD | root          | Influxdb passsword |
+| IDG_DBNAME     | data          | Influxdb database  |
 
 # InfluxDB data generator
 
